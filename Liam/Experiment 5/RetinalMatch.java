@@ -59,7 +59,8 @@ class RetinalMatch {
         // Comare using all four methods.
         for (int compareMethod = 0; compareMethod < 4; compareMethod++) {
             double similarity = Imgproc.compareHist(hist1, hist2, compareMethod);
-            System.out.println("Similarity using method " + compareMethod + " was " + similarity);
+            String betterText = compareMethod % 2 == 0 ? "(higher is more similar)" : "(lower is more similar)";
+            System.out.println("Similarity using method " + compareMethod + " was " + similarity + " " + betterText);
         }
     }
 }
