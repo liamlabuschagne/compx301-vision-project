@@ -9,10 +9,12 @@ import org.opencv.core.Core;
 class RetinalMatch {
 
     public static void main(String[] args) {
-        if (args.length < 4 || (args.length < 6 && !args[0].equals("laplace"))) {
+        if (!(args[0].equals("sobel") && args.length == 5)
+                && !(args[0].equals("gaussian") && args.length == 6)
+                && !(args[0].equals("laplace") && args.length == 4)) {
             System.out.println("Built-in filters");
             System.out.println("Options are:");
-            System.out.println("Sobel: java RetinalMatch sobel <input.jpg> <output.jpg> <dx> <dy> <ksize>");
+            System.out.println("Sobel: java RetinalMatch sobel <input.jpg> <output.jpg> <derivative order> <ksize>");
             System.out
                     .println("Gaussian: java RetinalMatch gaussian <input.jpg> <output.jpg> <ksize> <sigmaX> <sigmaY>");
             System.out
@@ -32,19 +34,19 @@ class RetinalMatch {
 
         System.out.println("Applying " + args[0] + " filter.");
         switch (args[0]) {
-            case "guassian":
+            case "gaussian":
                 int ksize = Integer.parseInt(args[3]);
                 double sigmaX = Double.parseDouble(args[4]);
                 double sigmaY = Double.parseDouble(args[5]);
                 Imgproc.GaussianBlur(src, dst, new Size(ksize, ksize), sigmaX, sigmaY);
                 break;
             case "sobel":
+                int order = Integer.parseInt(args[3]);
+                ksize = Integer.parseInt(args[4]);
                 // Apply sobel in both directions
-                Imgproc.Sobel(src, dst, -1, 1, 0,
-                        Integer.parseInt(args[5]));
+                Imgproc.Sobel(src, dst, -1, order, 0, ksize);
                 Mat dst2 = new Mat(src.size(), src.type());
-                Imgproc.Sobel(src, dst2, -1, 0, 1,
-                        Integer.parseInt(args[5]));
+                Imgproc.Sobel(src, dst2, -1, 0, order, ksize);
                 // Then add the results
                 Core.add(dst, dst2, dst);
                 break;
