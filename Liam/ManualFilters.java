@@ -5,14 +5,14 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 
-class RetinalMatch {
+class ManualFilters {
 
     public static void main(String[] args) {
 
         if (args.length < 3) {
             System.out.println("Linear Filters");
             System.out.println("Filter options are: guassian, laplace, box");
-            System.out.println("Usage: java RetinalMatch <input.jpg> <output.jpg> <fillter>");
+            System.out.println("Usage: java ManualFilters <input.jpg> <output.jpg> <fillter>");
             return;
         }
 

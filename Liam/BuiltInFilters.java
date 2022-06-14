@@ -1,4 +1,3 @@
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -6,19 +5,20 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 
-class RetinalMatch {
+class BuiltInFilters {
 
     public static void main(String[] args) {
-        if (!(args[0].equals("sobel") && args.length == 5)
+        if (args.length == 0 || (!(args[0].equals("sobel") && args.length == 5)
                 && !(args[0].equals("gaussian") && args.length == 6)
-                && !(args[0].equals("laplace") && args.length == 4)) {
+                && !(args[0].equals("laplace") && args.length == 4))) {
             System.out.println("Built-in filters");
             System.out.println("Options are:");
-            System.out.println("Sobel: java RetinalMatch sobel <input.jpg> <output.jpg> <derivative order> <ksize>");
+            System.out.println("Sobel: java BuiltInFilters sobel <input.jpg> <output.jpg> <derivative order> <ksize>");
             System.out
-                    .println("Gaussian: java RetinalMatch gaussian <input.jpg> <output.jpg> <ksize> <sigmaX> <sigmaY>");
+                    .println(
+                            "Gaussian: java BuiltInFilters gaussian <input.jpg> <output.jpg> <ksize> <sigmaX> <sigmaY>");
             System.out
-                    .println("Laplace: java RetinalMatch laplace <input.jpg> <output.jpg> <ksize>");
+                    .println("Laplace: java BuiltInFilters laplace <input.jpg> <output.jpg> <ksize>");
             return;
         }
 

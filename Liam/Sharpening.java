@@ -2,17 +2,15 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Core;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.core.Core;
 
-class RetinalMatch {
+class Sharpening {
 
     public static void main(String[] args) {
         if (args.length < 3) {
             System.out.println("Sharpening");
-            System.out.println("Usage: java RetinalMatch <input.jpg> <output.jpg> <sharpening factor n>");
+            System.out.println("Usage: java Sharpening <input.jpg> <output.jpg> <sharpening factor n>");
             return;
         }
 

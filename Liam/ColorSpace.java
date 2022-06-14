@@ -3,13 +3,13 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 
-class RetinalMatch {
+class ColorSpace {
 
     public static void main(String[] args) {
 
         if (args.length != 3) {
             System.out.println("Colourspace Conversion");
-            System.out.println("Usage: java RetinalMatch <input.jpg> <output.jpg> <colour space code>");
+            System.out.println("Usage: java ColorSpace <input.jpg> <output.jpg> <colour space code>");
             System.out.println("where colour space code is one of the OpenCV BGR2_ codes.");
             System.out.println("Useful codes:");
             System.out.println("GRAY: 6");
