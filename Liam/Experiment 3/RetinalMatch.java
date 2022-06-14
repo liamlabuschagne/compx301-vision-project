@@ -39,8 +39,14 @@ class RetinalMatch {
                 Imgproc.GaussianBlur(src, dst, new Size(ksize, ksize), sigmaX, sigmaY);
                 break;
             case "sobel":
-                Imgproc.Sobel(src, dst, -1, Integer.parseInt(args[3]), Integer.parseInt(args[4]),
+                // Apply sobel in both directions
+                Imgproc.Sobel(src, dst, -1, 1, 0,
                         Integer.parseInt(args[5]));
+                Mat dst2 = new Mat(src.size(), src.type());
+                Imgproc.Sobel(src, dst2, -1, 0, 1,
+                        Integer.parseInt(args[5]));
+                // Then add the results
+                Core.add(dst, dst2, dst);
                 break;
             case "laplace":
                 ksize = Integer.parseInt(args[3]);
