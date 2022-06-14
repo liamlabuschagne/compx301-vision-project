@@ -5,7 +5,7 @@ To see the full report for this project visit this google drive link:
 
 ## Usage
 ```
-export CLASSPATH="/usr/share/java/opencv4/opencv-455.jar:."
-javac -d . RetinalMatch.java
+export CLASSPATH="/usr/share/java/opencv.jar:."
+javac RetinalMatch.java
 java RetinalMatch image1.jpg image2.jpg
 ```
