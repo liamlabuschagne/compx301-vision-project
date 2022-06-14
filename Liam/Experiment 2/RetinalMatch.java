@@ -10,8 +10,9 @@ class RetinalMatch {
     public static void main(String[] args) {
 
         if (args.length < 3) {
-            System.out.println(
-                    "Please provide two file names, one input one output.\nThird parameter is the filter type, options are: box, gaussian and laplace.");
+            System.out.println("Linear Filters");
+            System.out.println("Filter options are: guassian, laplace, box");
+            System.out.println("Usage: java RetinalMatch <input.jpg> <output.jpg> <fillter>");
             return;
         }
 
@@ -26,18 +27,21 @@ class RetinalMatch {
         Mat dst = new Mat(src.size(), src.type());
 
         // Prepare the filter
-        Mat kernel = new Mat(3, 3, CvType.CV_32F);
+        Mat kernel = new Mat();
         switch (args[2]) {
             case "gaussian":
+                kernel = new Mat(3, 3, CvType.CV_32F);
                 // Compass directions are 5
-                kernel.setTo(new Scalar(5.0 / 40.0));
+                kernel.setTo(new Scalar(5));
                 // Corners are 3
-                kernel.put(0, 0, 3.0 / 40.0);
-                kernel.put(2, 0, 3.0 / 40.0);
-                kernel.put(0, 2, 3.0 / 40.0);
-                kernel.put(2, 2, 3.0 / 40.0);
+                kernel.put(0, 0, 3);
+                kernel.put(2, 0, 3);
+                kernel.put(0, 2, 3);
+                kernel.put(2, 2, 3);
                 // Centre is 8
-                kernel.put(1, 1, 8.0 / 40.0);
+                kernel.put(1, 1, 8);
+
+                Core.divide(kernel, new Scalar(40.0), kernel);
                 break;
             case "laplace":
                 kernel = new Mat(5, 5, CvType.CV_32F);
@@ -64,16 +68,19 @@ class RetinalMatch {
                 break;
             case "box":
             default:
-                kernel.setTo(new Scalar(1.0 / 9.0));
+                kernel = Mat.ones(5, 5, CvType.CV_32F);
+                Core.divide(kernel, new Scalar(25.0), kernel);
                 break;
         }
 
         System.out.println("Applying " + args[2] + " filter with following matrix:");
         System.out.println(kernel.dump());
 
-        // Apply the filter and output to dst image
-        System.out.println("Outputting to " + args[1]);
+        // Apply the filter
         Imgproc.filter2D(src, dst, -1, kernel);
+
+        // Output image
+        System.out.println("Outputting to " + args[1]);
         Imgcodecs.imwrite(args[1], dst);
     }
 }
