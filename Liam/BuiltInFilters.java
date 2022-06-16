@@ -8,15 +8,14 @@ import org.opencv.core.Core;
 
 class BuiltInFilters {
 
-    public static Mat gaussian(Mat src, int ksize, double sigma) {
+    public static void gaussian(Mat src, int ksize, double sigma) {
         System.out.println("Applying gaussian filter");
         System.out.println("Kernel Size: " + ksize);
         System.out.println("Sigma: " + sigma);
         Imgproc.GaussianBlur(src, src, new Size(ksize, ksize), sigma);
-        return src;
     }
 
-    public static Mat sobel(Mat src, int order, int ksize) {
+    public static void sobel(Mat src, int order, int ksize) {
         System.out.println("Applying sobel filter");
         System.out.println("Derivative order: " + order);
         System.out.println("Kernel Size: " + ksize);
@@ -27,14 +26,12 @@ class BuiltInFilters {
 
         // Add them together
         Core.addWeighted(grad_x, 0.5, grad_y, 0.5, 0, src);
-        return src;
     }
 
-    public static Mat laplace(Mat src, int ksize) {
+    public static void laplace(Mat src, int ksize) {
         System.out.println("Applying laplace filter");
         System.out.println("Kernel Size: " + ksize);
         Imgproc.Laplacian(src, src, -1, ksize);
-        return src;
     }
 
     public static void showUsage() {
