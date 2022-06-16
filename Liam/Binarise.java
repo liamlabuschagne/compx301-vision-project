@@ -5,12 +5,11 @@ import org.opencv.imgproc.Imgproc;
 
 class Binarise {
 
-    public static Mat binarise(Mat src, int blocksize, double C) {
+    public static void binarise(Mat src, int blocksize, double C) {
         System.out.println("Applying adaptive binary thresholding using MEAN_C method.");
         System.out.println("Block size: " + blocksize);
         System.out.println("C value: " + C);
         Imgproc.adaptiveThreshold(src, src, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, blocksize, C);
-        return src;
     }
 
     public static void main(String[] args) {
@@ -27,9 +26,9 @@ class Binarise {
         System.out.println("Loading image " + args[0]);
         Mat src = Imgcodecs.imread(args[0], Imgcodecs.IMREAD_GRAYSCALE);
 
-        Mat dst = binarise(src, Integer.parseInt(args[2]), Double.parseDouble(args[3]));
+        binarise(src, Integer.parseInt(args[2]), Double.parseDouble(args[3]));
 
         System.out.println("Saving image " + args[1]);
-        Imgcodecs.imwrite(args[1], dst);
+        Imgcodecs.imwrite(args[1], src);
     }
 }
