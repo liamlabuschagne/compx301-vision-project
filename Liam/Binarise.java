@@ -6,11 +6,11 @@ import org.opencv.imgproc.Imgproc;
 class Binarise {
 
     public static Mat binarise(Mat src, int blocksize, double C) {
-        // Creating an empty matrices to store the destination image.
-        Mat dst = new Mat(src.rows(), src.cols(), src.type());
-        System.out.println("Applying adaptive thresholding.");
-        Imgproc.adaptiveThreshold(src, dst, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, blocksize, C);
-        return dst;
+        System.out.println("Applying adaptive binary thresholding using MEAN_C method.");
+        System.out.println("Block size: " + blocksize);
+        System.out.println("C value: " + C);
+        Imgproc.adaptiveThreshold(src, src, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, blocksize, C);
+        return src;
     }
 
     public static void main(String[] args) {
@@ -24,12 +24,12 @@ class Binarise {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         // Load the image
-        System.out.println("Loading file " + args[0]);
+        System.out.println("Loading image " + args[0]);
         Mat src = Imgcodecs.imread(args[0], Imgcodecs.IMREAD_GRAYSCALE);
 
         Mat dst = binarise(src, Integer.parseInt(args[2]), Double.parseDouble(args[3]));
 
-        System.out.println("Outputting to file " + args[1]);
+        System.out.println("Saving image " + args[1]);
         Imgcodecs.imwrite(args[1], dst);
     }
 }
