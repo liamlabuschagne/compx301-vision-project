@@ -5,6 +5,12 @@ import org.opencv.imgproc.Imgproc;
 
 class MedianBlur {
 
+    public static void medianBlur(Mat src, int ksize) {
+        System.out.println("Applying median blur");
+        System.out.println("Kernel Size: " + ksize);
+        Imgproc.medianBlur(src, src, ksize);
+    }
+
     public static void main(String[] args) {
         if (args.length < 2) {
             System.out.println("Median Blur");
@@ -16,19 +22,15 @@ class MedianBlur {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         // Load the image
-        System.out.println("Loading file " + args[0]);
+        System.out.println("Loading image: " + args[0]);
         Mat src = Imgcodecs.imread(args[0]);
-
-        // Creating an empty matrix to store the destination image.
-        Mat dst = new Mat(src.rows(), src.cols(), src.type());
 
         // Apply median blur
         int ksize = Integer.parseInt(args[2]);
-        System.out.println("Applying median blur with " + ksize + " ksize");
-        Imgproc.medianBlur(src, dst, ksize);
+        medianBlur(src, ksize);
 
         // Output image
-        System.out.println("Outputting file " + args[1]);
-        Imgcodecs.imwrite(args[1], dst);
+        System.out.println("Saving image: " + args[1]);
+        Imgcodecs.imwrite(args[1], src);
     }
 }
