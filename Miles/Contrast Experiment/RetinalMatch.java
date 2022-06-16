@@ -16,8 +16,8 @@ public class RetinalMatch {
         Mat src=Imgcodecs.imread("../../RIDB/IM000001_2.jpg");
         Mat dst= Mat.zeros(src.size(), src.type());
         
-        double alpha = 2.2; //Modifies contrast
-        int beta = 50; //Modifies Brightness
+        double alpha = 0.5; //Modifies contrast
+        int beta = 20; //Modifies Brightness
 
         byte[] srcData = new byte[(int) (src.total()*src.channels())];
         src.get(0, 0, srcData);
