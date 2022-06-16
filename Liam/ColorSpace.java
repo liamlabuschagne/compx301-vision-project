@@ -5,10 +5,9 @@ import org.opencv.core.Core;
 
 class ColorSpace {
 
-    public static Mat cvtColorSpace(Mat src, int code) {
+    public static void cvtColorSpace(Mat src, int code) {
         System.out.println("Converting to colour space with code: " + code);
         Imgproc.cvtColor(src, src, code);
-        return src;
     }
 
     public static void main(String[] args) {
@@ -40,7 +39,7 @@ class ColorSpace {
 
         // Convert to new colourspace
         int code = Integer.parseInt(args[2]);
-        src = cvtColorSpace(src, code);
+        cvtColorSpace(src, code);
 
         // Output converted file
         System.out.println("Outputting file " + args[1]);
