@@ -127,21 +127,21 @@ class Pipeline1 {
         Imgproc.dilate(src, src, element, anchor, iterations);
     }
 
+    public static int stepNumber = 1;
+
+    public static void step(Mat src) {
+        Imgcodecs.imwrite("step" + stepNumber + ".jpg", src);
+        stepNumber++;
+    }
+
     public static void pipeline(Mat src) {
-        // applyCLAHE(src, 8, 4); // Contrast enhancement
-        Imgcodecs.imwrite("step1.jpg", src);
-        medianBlur(src, 5); // Remove some noise
-        Imgcodecs.imwrite("step2.jpg", src);
-        // gaussian(src, 11, 5);
-        // sharpen(src, 10); // Sharpen to define the veins more
-        Imgcodecs.imwrite("step3.jpg", src);
-        cvtColorSpace(src, 6); // Convert to grayscale
-        Imgcodecs.imwrite("step4.jpg", src);
-        // sobel(src, 1, -1); // Apply Scharr edge detection
-        Imgcodecs.imwrite("step5.jpg", src);
-        binarise(src, 11, 1.01); // Binarise to convert to black and white
-        Imgcodecs.imwrite("step6.jpg", src);
-        shrinkGrow(src, 3, 2);
+        applyCLAHE(src, 8, 4); // Adaptive contrast enhancement
+        step(src);
+        sharpen(src, 10);
+        step(src);
+        gaussian(src, 7, 2000000);
+        step(src);
+        sobel(src, 1, -1); // Scharr edge detection
     }
 
     public static void main(String args[]) {
