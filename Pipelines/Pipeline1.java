@@ -212,22 +212,15 @@ class Pipeline1 {
         medianBlur(src, 15);
         // // step(src);
         shrinkGrow(src, 3, 2);
-        step(src);
+        // step(src);
         cvtColorSpace(src, Imgproc.COLOR_BGR2HSV);
     }
 
-    public static void main(String args[]) {
-        if (args.length != 2) {
-            System.out.println("Usage: java Pipeline1 <input1.jpg> <input2.jpg>");
-            return;
-        }
+    public static boolean isSame(String image1, String image2) {
 
-        // Load OpenCV native library
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-        Mat src1 = Imgcodecs.imread(args[0]);
+        Mat src1 = Imgcodecs.imread(image1);
+        Mat src2 = Imgcodecs.imread(image2);
         pipeline(src1);
-        Mat src2 = Imgcodecs.imread(args[1]);
         pipeline(src2);
 
         Mat[] parts1 = subset(src1);
@@ -239,13 +232,23 @@ class Pipeline1 {
             similarity += 0.25 * histEval(parts1[i], parts2[i]);
         }
 
-        boolean samePerson = args[0].charAt(9) == args[1].charAt(9);
-
+        boolean samePerson = image1.charAt(9) == image2.charAt(9);
         System.out.println("Similarity: " + similarity);
         System.out.println("Same: " + (similarity > 0.98 ? "Yes" : "No"));
-        System.out.println("Correct: " + (similarity > 0.98 && samePerson ? "Yes" : "No"));
+        boolean correct = similarity > 0.98 && samePerson;
+        System.out.println("Correct: " + (correct ? "Yes" : "No"));
+        return correct;
+    }
 
-        Imgcodecs.imwrite("output1.jpg", src1);
-        Imgcodecs.imwrite("output2.jpg", src2);
+    public static void main(String args[]) {
+        if (args.length != 2) {
+            System.out.println("Usage: java Pipeline1 <input1.jpg> <input2.jpg>");
+            return;
+        }
+
+        // Load OpenCV native library
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+        isSame(args[0], args[1]);
     }
 }
