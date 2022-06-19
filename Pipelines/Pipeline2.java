@@ -25,7 +25,6 @@ import org.opencv.features2d.SIFT;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FastFeatureDetector;
 import org.opencv.features2d.Features2d;
-import org.opencv.xfeatures2d.SURF;
 
 class Pipeline2 {
     public static void applyCLAHE(Mat src, int tileGridWidth, double clipLimit) {
@@ -215,17 +214,12 @@ class Pipeline2 {
         pipeline(src2);
 
         // -- Step 1: Detect the keypoints using SURF Detector, compute the descriptors
-        double hessianThreshold = 400;
-        int nOctaves = 1;// 4;
-        int nOctaveLayers = 1;// 3;
-        boolean extended = false, upright = false;
-        SURF detector = SURF.create(hessianThreshold, nOctaves, nOctaveLayers, extended, upright);
+        SIFT detector = SIFT.create();
         MatOfKeyPoint keypoints1 = new MatOfKeyPoint(), keypoints2 = new MatOfKeyPoint();
         Mat descriptors1 = new Mat(), descriptors2 = new Mat();
         detector.detectAndCompute(src1, new Mat(), keypoints1, descriptors1);
         detector.detectAndCompute(src2, new Mat(), keypoints2, descriptors2);
         // -- Step 2: Matching descriptor vectors with a FLANN based matcher
-        // Since SURF is a floating-point descriptor NORM_L2 is used
         DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.FLANNBASED);
         List<MatOfDMatch> knnMatches = new ArrayList<>();
         matcher.knnMatch(descriptors1, descriptors2, knnMatches, 2);
@@ -242,15 +236,6 @@ class Pipeline2 {
         }
         MatOfDMatch goodMatches = new MatOfDMatch();
         goodMatches.fromList(listOfGoodMatches);
-
-        // -- Draw matches
-        Mat imgMatches = new Mat();
-        Features2d.drawMatches(src1, keypoints1, src2, keypoints2, goodMatches, imgMatches, Scalar.all(-1),
-                Scalar.all(-1), new MatOfByte(), 2);
-
-        // Imgcodecs.imwrite("output1.jpg", src1);
-        // Imgcodecs.imwrite("output2.jpg", src2);
-        // Imgcodecs.imwrite("matches.jpg", imgMatches);
 
         System.out.println("Good Matches: " + goodMatches.size(0));
         return goodMatches.size(0) > 190;
@@ -301,7 +286,5 @@ class Pipeline2 {
             }
             System.err.println(correct + "/" + tests);
         }
-
-        // System.out.println("Same: " + (isSame(args[0], args[1]) ? "Yes" : "No"));
     }
 }
