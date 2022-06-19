@@ -25,6 +25,7 @@ import org.opencv.features2d.SIFT;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FastFeatureDetector;
 import org.opencv.features2d.Features2d;
+import org.opencv.features2d.ORB;
 
 class Pipeline2 {
     public static void applyCLAHE(Mat src, int tileGridWidth, double clipLimit) {
@@ -214,31 +215,28 @@ class Pipeline2 {
         pipeline(src2);
 
         // -- Step 1: Detect the keypoints using SURF Detector, compute the descriptors
-        SIFT detector = SIFT.create();
+        ORB detector = ORB.create();
         MatOfKeyPoint keypoints1 = new MatOfKeyPoint(), keypoints2 = new MatOfKeyPoint();
         Mat descriptors1 = new Mat(), descriptors2 = new Mat();
         detector.detectAndCompute(src1, new Mat(), keypoints1, descriptors1);
         detector.detectAndCompute(src2, new Mat(), keypoints2, descriptors2);
-        // -- Step 2: Matching descriptor vectors with a FLANN based matcher
-        DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.FLANNBASED);
-        List<MatOfDMatch> knnMatches = new ArrayList<>();
-        matcher.knnMatch(descriptors1, descriptors2, knnMatches, 2);
-        // -- Filter matches using the Lowe's ratio test
-        float ratioThresh = 0.7f;
-        List<DMatch> listOfGoodMatches = new ArrayList<>();
-        for (int i = 0; i < knnMatches.size(); i++) {
-            if (knnMatches.get(i).rows() > 1) {
-                DMatch[] matches = knnMatches.get(i).toArray();
-                if (matches[0].distance < ratioThresh * matches[1].distance) {
-                    listOfGoodMatches.add(matches[0]);
-                }
-            }
-        }
-        MatOfDMatch goodMatches = new MatOfDMatch();
-        goodMatches.fromList(listOfGoodMatches);
 
-        System.out.println("Good Matches: " + goodMatches.size(0));
-        return goodMatches.size(0) > 190;
+        int similarity = 0;
+
+        if (descriptors1.cols() == descriptors2.cols()) {
+            MatOfDMatch matchMatrix = new MatOfDMatch();
+            DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMING);
+            matcher.match(descriptors1, descriptors2, matchMatrix);
+            DMatch[] matches = matchMatrix.toArray();
+
+            for (DMatch match : matches)
+                if (match.distance <= 50)
+                    similarity++;
+        }
+
+        System.out.println("Matches" + similarity);
+
+        return similarity > 400;
     }
 
     public static void main(String args[]) {
